@@ -8,13 +8,15 @@ export default function Weather(props) {
   let [city, setCity] = useState(props.defaultCity);
 
   function displayTemperature(response) {
+    let icon = response.data.condition.icon;
+    console.log(response);
     setWeatherData({
       ready: true,
       city: response.data.city,
       temperature: response.data.temperature.current,
       date: new Date(response.data.time * 1000),
       description: response.data.condition.description,
-      imgUrl: "https://ssl.gstatic.com/onebox/weather/64/sunny.png",
+      imgUrl: `http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${icon}.png`,
       humidity: response.data.temperature.humidity,
       wind: response.data.wind.speed,
     });
@@ -22,14 +24,18 @@ export default function Weather(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    let apiKey = "ee4b35717d055b166do409ddtcf1532a";
-    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
-
-    axios.get(apiUrl).then(displayTemperature);
+    search();
   }
 
   function displayCity(event) {
     setCity(event.target.value);
+  }
+
+  function search() {
+    let apiKey = "ee4b35717d055b166do409ddtcf1532a";
+    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+
+    axios.get(apiUrl).then(displayTemperature);
   }
 
   if (weatherData.ready) {
@@ -90,6 +96,7 @@ export default function Weather(props) {
       </div>
     );
   } else {
+    search();
     return "Loading...";
   }
 }
