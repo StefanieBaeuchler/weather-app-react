@@ -3,8 +3,8 @@ import Weather from "./Weather";
 
 function App() {
   return (
-    <div className="App">
-      <Weather />
+    <div className="App" >
+      <Weather defaultCity="Vienna"/>
       <p>
         Open source code by{" "}
         <a href="https://github.com/StefanieBaeuchler/weather-app-react">
