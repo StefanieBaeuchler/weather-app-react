@@ -5,6 +5,8 @@ import "./Weather.css";
 
 export default function Weather(props) {
   let [weatherData, setWeatherData] = useState({ ready: false });
+  let [city, setCity] = useState(props.defaultCity);
+
   function displayTemperature(response) {
     setWeatherData({
       ready: true,
@@ -18,10 +20,22 @@ export default function Weather(props) {
     });
   }
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    let apiKey = "ee4b35717d055b166do409ddtcf1532a";
+    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+
+    axios.get(apiUrl).then(displayTemperature);
+  }
+
+  function displayCity(event) {
+    setCity(event.target.value);
+  }
+
   if (weatherData.ready) {
     return (
       <div className="Weather">
-        <form className="mb-3">
+        <form className="mb-3" onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-9">
               <input
@@ -29,6 +43,7 @@ export default function Weather(props) {
                 placeholder="Type a city.."
                 className="form-control"
                 autoComplete="off"
+                onChange={displayCity}
               />
             </div>
             <div className="col-3">
@@ -43,7 +58,9 @@ export default function Weather(props) {
         <div className="overview">
           <h1>{weatherData.city}</h1>
           <ul>
-            <li><FriendlyDate date={weatherData.date}/> </li>
+            <li>
+              <FriendlyDate date={weatherData.date} />{" "}
+            </li>
             <li>{weatherData.description}</li>
           </ul>
         </div>
@@ -73,9 +90,6 @@ export default function Weather(props) {
       </div>
     );
   } else {
-    let apiKey = "ee4b35717d055b166do409ddtcf1532a";
-    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${props.defaultCity}&key=${apiKey}`;
-
-    axios.get(apiUrl).then(displayTemperature);
+    return "Loading...";
   }
 }
