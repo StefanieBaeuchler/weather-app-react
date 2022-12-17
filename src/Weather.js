@@ -3,24 +3,23 @@ import axios from "axios";
 import "./Weather.css";
 
 export default function Weather() {
-  const [ready, setReady] = useState(false);
-  const [weatherData, setWeatherData] = useState({});
+  const [weatherData, setWeatherData] = useState({ ready: false });
+
 
   function displayTemperature(response) {
     setWeatherData({
-      temperature: response.data.temperature.current,
-      humidity: response.data.temperature.humidity,
-      date: "Wednesday 7:00",
+      ready: true,
+      temperature: response.data.main.temp,
+      humidity: response.data.main.humidity,
+      date: new Date(response.data.dt * 1000),
+      description: response.data.weather[0].description,
+      icon: response.data.weather[0].icon,
       wind: response.data.wind.speed,
       city: response.data.name,
-      description: response.data.condition.description,
-      iconUrl: "https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png",
     });
-
-    setReady(true);
   }
 
-  if (ready) {
+  if (weatherData.ready) {
     return (
       <div className="Weather">
         <form className="mb-3">
@@ -53,7 +52,7 @@ export default function Weather() {
           <div className="col-6">
             <div className="clearfix weather-temperature">
               <img
-                src={weatherData.imgUrl}
+                src={weatherData.icon}
                 alt={weatherData.description}
                 className="float-left"
               />
