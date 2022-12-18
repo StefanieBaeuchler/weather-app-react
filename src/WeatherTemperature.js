@@ -1,37 +1,50 @@
 import React, { useState } from "react";
 
 export default function WeatherTemperature(props) {
-  const [temperature, setTemperature] = useState(props.celsius);
-  const [unit, setUnit] = useState("celsius");
+  let temperature = props.celsius;
+  let [unit, setUnit] = useState("celsius");
 
   function fahrenheit(event) {
     event.preventDefault();
 
-    let fahrenheitTemperature = Math.round(props.celsius * (9 / 5) + 32);
-    setUnit("imperial");
-    setTemperature(fahrenheitTemperature);
+    setUnit("fahrenheit");
   }
 
   function celsius(event) {
     event.preventDefault();
+
     setUnit("celsius");
-    setTemperature(props.celsius);
   }
 
-  return (
-    <div className="temperature">
-      <strong>
-        {temperature} ({unit})
-      </strong>
-      <span className="units">
-        <a href="/" onClick={celsius}>
-          °C
-        </a>{" "}
-        |{" "}
-        <a href="/" onClick={fahrenheit}>
-          °F
-        </a>
-      </span>
-    </div>
-  );
+  if (unit === "celsius") {
+    return (
+      <div className="temperature">
+        <strong>{Math.round(temperature)}</strong>
+        <span className="units">
+          <a href="/" onClick={celsius}>
+            °C
+          </a>{" "}
+          |{" "}
+          <a href="/" onClick={fahrenheit}>
+            °F
+          </a>
+        </span>
+      </div>
+    );
+  } else {
+    return (
+      <div className="temperature">
+        <strong>{Math.round((temperature * 9) / 5 + 32)}</strong>
+        <span className="units">
+          <a href="/" onClick={celsius}>
+            °C
+          </a>{" "}
+          |{" "}
+          <a href="/" onClick={fahrenheit}>
+            °F
+          </a>
+        </span>
+      </div>
+    );
+  }
 }
